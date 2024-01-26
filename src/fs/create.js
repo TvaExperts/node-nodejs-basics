@@ -2,20 +2,22 @@ import { open, close, write } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const FOLDER_NAME = 'files';
 const FILE_NAME = 'fresh.txt';
 
-const filePath = path.join(__dirname, FOLDER_NAME ,FILE_NAME);
-
 const TEXT_VALUE = 'I am fresh and young';
+
+const ERROR_MESSAGE = 'FS operation failed';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const filePath = path.join(__dirname, FOLDER_NAME ,FILE_NAME);
 
 const create = async () => {
   open(filePath, 'wx', (err, fd) => {
     if (err) {
       if (err.code === 'EEXIST') {
-        throw new Error('FS operation failed');
+        throw new Error(ERROR_MESSAGE);
       }
       throw err;
     }
