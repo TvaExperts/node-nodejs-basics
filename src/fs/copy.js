@@ -13,7 +13,7 @@ const newFolderPath = path.join(__dirname, NEW_FOLDER_NAME)
 
 const copy = async () => {
   try {
-    await fsPromises.access(folderPath, constants.R_OK)
+    await fsPromises.access(folderPath, constants.F_OK)
     await fsPromises.mkdir(newFolderPath);
   } catch {
     throw new Error('FS operation failed');
