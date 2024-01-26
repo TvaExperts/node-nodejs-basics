@@ -1,6 +1,6 @@
 import { constants } from 'fs';
 import fsPromises from 'fs/promises';
-import path, { dirname } from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const FOLDER_NAME = 'files';
@@ -11,8 +11,8 @@ const ERROR_MESSAGE = 'FS operation failed';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const fileNamePath = path.join(__dirname, FOLDER_NAME, FILE_NAME);
-const newFileNamePath = path.join(__dirname, FOLDER_NAME, NEW_FILE_NAME);
+const fileNamePath = join(__dirname, FOLDER_NAME, FILE_NAME);
+const newFileNamePath = join(__dirname, FOLDER_NAME, NEW_FILE_NAME);
 
 
 const rename = async () => {

@@ -1,5 +1,5 @@
 import { open, close, write } from 'fs';
-import path, { dirname } from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const FOLDER_NAME = 'files';
@@ -11,7 +11,7 @@ const ERROR_MESSAGE = 'FS operation failed';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const filePath = path.join(__dirname, FOLDER_NAME ,FILE_NAME);
+const filePath = join(__dirname, FOLDER_NAME ,FILE_NAME);
 
 const create = async () => {
   open(filePath, 'wx', (err, fd) => {

@@ -1,4 +1,4 @@
-import path, { dirname } from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { constants } from 'fs';
 import fsPromises from 'fs/promises';
@@ -10,13 +10,13 @@ const ERROR_MESSAGE = 'FS operation failed';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const filePath = path.join(__dirname, FOLDER_NAME, FILE_NAME);
+const filePath = join(__dirname, FOLDER_NAME, FILE_NAME);
 
 const read = async () => {
   try {
    await fsPromises.access(filePath, constants.R_OK);
 
-   const dataFromFile = await fsPromises.readFile(filePath, {encoding:'utf8'});
+   const dataFromFile = await fsPromises.readFile(filePath, { encoding: 'utf8' });
 
    console.log(dataFromFile);
   } catch (error) {
