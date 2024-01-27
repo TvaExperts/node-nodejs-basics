@@ -10,7 +10,7 @@ const filePath = path.join(__dirname, FOLDER_NAME, FILE_NAME);
 
 const read = async () => {
   const readStream = fs.createReadStream(filePath);
-  readStream.on('data', (chunk) => process.stdout.write(chunk.toString()));
+  readStream.pipe(process.stdout);
 };
 
 await read();
