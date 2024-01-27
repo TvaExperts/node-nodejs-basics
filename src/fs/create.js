@@ -1,34 +1,23 @@
-import { open, close, write } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'fs';
+import path from 'path';
+import { createFsError } from '../utils/createFsError.js';
+import { getDirNameFromMetaUrl } from '../utils/getDirNameFromMetaUrl.js';
 
 const FOLDER_NAME = 'files';
 const FILE_NAME = 'fresh.txt';
 
 const TEXT_VALUE = 'I am fresh and young';
 
-const ERROR_MESSAGE = 'FS operation failed';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const filePath = join(__dirname, FOLDER_NAME ,FILE_NAME);
+const __dirname = getDirNameFromMetaUrl(import.meta.url);
+const filePath = path.join(__dirname, FOLDER_NAME, FILE_NAME);
 
 const create = async () => {
-  open(filePath, 'wx', (err, fd) => {
-    if (err) {
-      if (err.code === 'EEXIST') {
-        throw new Error(ERROR_MESSAGE);
+  fs.writeFile(filePath, TEXT_VALUE, { flag: 'wx' }, (error) => {
+    if (error) {
+      if (error.code === 'EEXIST') {
+        throw createFsError();
       }
-      throw err;
-    }
-    try {
-      write(fd, TEXT_VALUE,(err) => {
-        if (err) throw err;
-      })
-    } finally {
-      close(fd, (err) => {
-        if (err) throw err;
-      });
+      throw error;
     }
   });
 };

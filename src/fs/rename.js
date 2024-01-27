@@ -1,40 +1,31 @@
-import { constants } from 'fs';
-import fsPromises from 'fs/promises';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'fs';
+import path from 'path';
+import { createFsError } from '../utils/createFsError.js';
+import { getDirNameFromMetaUrl } from '../utils/getDirNameFromMetaUrl.js';
 
 const FOLDER_NAME = 'files';
 const FILE_NAME = 'wrongFilename.txt';
 const NEW_FILE_NAME = 'properFilename.md';
 
-const ERROR_MESSAGE = 'FS operation failed';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const fileNamePath = join(__dirname, FOLDER_NAME, FILE_NAME);
-const newFileNamePath = join(__dirname, FOLDER_NAME, NEW_FILE_NAME);
-
+const __dirname = getDirNameFromMetaUrl(import.meta.url);
+const fileNamePath = path.join(__dirname, FOLDER_NAME, FILE_NAME);
+const newFileNamePath = path.join(__dirname, FOLDER_NAME, NEW_FILE_NAME);
 
 const rename = async () => {
-  try {
-    await fsPromises.access(fileNamePath, constants.F_OK);
+  fs.access(newFileNamePath, fs.constants.F_OK, (error) => {
+    if (!error) {
+      throw createFsError();
+    }
 
-    try {
-      await fsPromises.access(newFileNamePath, constants.F_OK);
-      throw new Error(ERROR_MESSAGE);
-    } catch (err) {
-      if (err.code !== 'ENOENT') {
+    fs.rename(fileNamePath, newFileNamePath, (err) => {
+      if (err) {
+        if (err.code === 'ENOENT') {
+          throw createFsError();
+        }
         throw err;
       }
-    }
-
-    await fsPromises.rename(fileNamePath, newFileNamePath);
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      throw new Error(ERROR_MESSAGE);
-    }
-    throw err;
-  }
+    });
+  });
 };
 
 await rename();
