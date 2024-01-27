@@ -1,13 +1,12 @@
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import fs from 'fs';
+import path from 'path';
+import { getDirNameFromMetaUrl } from '../utils/getDirNameFromMetaUrl.js';
 
 const FOLDER_NAME = 'files';
 const FILE_NAME = 'fileToRead.txt';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const filePath = join(__dirname, FOLDER_NAME, FILE_NAME);
+const __dirname = getDirNameFromMetaUrl(import.meta.url);
+const filePath = path.join(__dirname, FOLDER_NAME, FILE_NAME);
 
 const read = async () => {
   const readStream = fs.createReadStream(filePath);
