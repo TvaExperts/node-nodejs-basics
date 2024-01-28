@@ -23,7 +23,6 @@ function calculateFibonacci(num) {
 
     worker.on('message', (data) => {
       resolve({ status: TASK_STATUS.RESOLVED, ...data });
-      //resolve({ status: TASK_STATUS.RESOLVED, value: data });
     });
 
     worker.on('error', () => {
@@ -39,7 +38,7 @@ const performCalculations = async () => {
 
   const results = await Promise.all(calculationFibonacciPromises);
 
-  console.log(results);
+  console.table(results);
 };
 
 await performCalculations();
